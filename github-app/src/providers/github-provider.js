@@ -12,9 +12,11 @@ export const GithubContext = createContext( {
 
 const GithubProvider = ({ children }) => {
     const [githubState, setGithubState] = useState({
+        hasUser: false,
         loading: false,
         user: {
             login: undefined,
+            avatar_url: undefined,
             name: undefined,
             html_url: undefined,
             blog: undefined,
@@ -30,24 +32,38 @@ const GithubProvider = ({ children }) => {
     })
 
     const getUser = (username) => {
-        api.get(`users/${username}`).then(({data:{user}}) => {
+        setGithubState((prevState) => ({
+            ...prevState,
+            loading: !prevState.loading,
+        }));
+
+        api
+        .get(`users/${username}`)
+        .then(({data}) => {
             setGithubState(prevState => ({
-                ... prevState, 
+                ... prevState,
+                hasUser: true, 
                 user: {
-                    login: user.login,
-                    name: user.name,
-                    html_url: user.html_url,
-                    blog: user.blog,
-                    company: user.company,
-                    location: user.location,
-                    followers: user.followers,
-                    following: user.following,
-                    public_gists: user.public_gists,
-                    public_repos: user.public_repos,
+                    login: data.login,
+                    avatar_url: data.avatar_url,
+                    name: data.name,
+                    html_url: data.html_url,
+                    blog: data.blog,
+                    company: data.company,
+                    location: data.location,
+                    followers: data.followers,
+                    following: data.following,
+                    public_gists: data.public_gists,
+                    public_repos: data.public_repos,
             },
         }));
+    }).finally(() =>{
+        setGithubState((prevState) => ({
+            ...prevState,
+            loading: !prevState.loading,
+        }));
     });
-    }
+    };
 
     const contextValue = {
         githubState,
