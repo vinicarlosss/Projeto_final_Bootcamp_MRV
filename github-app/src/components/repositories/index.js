@@ -4,16 +4,18 @@ import RepositoryItem from '../repositoryitem';
 import * as S from './styled';
 
 const Repositories = () => {
-    const { githubState , getUserRepos } = useGithub();
+    const { githubState , getUserRepos, getUserStarred } = useGithub();
     const [hasUserForSearchrepos, sethasUserForSearchrepos] = useState(false) 
 
     useEffect(() =>{
-        if(!!githubState.user.login){
-            getUserRepos();
+        if(githubState.user.login){
+            getUserRepos(githubState.user.login);
+            getUserStarred(githubState.user.login);
         }
-        sethasUserForSearchrepos(!!githubState.user.login);
+        sethasUserForSearchrepos(!!githubState.repositories);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [githubState.user]);
+    }, [githubState.user.login]);
+
     return(
         <> 
             {hasUserForSearchrepos ? (
@@ -26,18 +28,28 @@ const Repositories = () => {
                         <S.WrapperTab>Starred</S.WrapperTab>
                     </S.WrapperTabList>
                     <S.WrapperTabPanel>
-                        <RepositoryItem 
-                            name="Ranking-Earning-yeld" 
-                            linkToRepo="https://github.com/vinicarlosss/Ranking-Earning-yeld"
-                            fullName="vinicarlosss/Ranking-Earning-yeld"
-                        />
+                        <S.WrapperList>
+                            {githubState.repositories.map((item) => (
+                                <RepositoryItem
+                                    key={item.id} 
+                                    name={item.name}
+                                    linkToRepo={item.html_url}
+                                    fullName={item.full_name}
+                                />
+                            ))}
+                        </S.WrapperList>
                     </S.WrapperTabPanel>
                     <S.WrapperTabPanel>
-                        <RepositoryItem
-                            name="API_Rest_de_consulta_de_cidades-do-Brasil" 
-                            linkToRepo="https://github.com/vinicarlosss/API_Rest_de_consulta_de_cidades-do-Brasil"
-                            fullName="vinicarlosss/API_Rest_de_consulta_de_cidades-do-Brasil"               
-                        />
+                    <S.WrapperList>
+                            {githubState.starred.map((item) => (
+                                <RepositoryItem
+                                    key={item.id} 
+                                    name={item.name}
+                                    linkToRepo={item.html_url}
+                                    fullName={item.full_name}
+                                />
+                            ))}
+                        </S.WrapperList>
                     </S.WrapperTabPanel>
                 </S.WrapperTabs>
         ) : (
