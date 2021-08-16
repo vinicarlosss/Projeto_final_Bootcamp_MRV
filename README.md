@@ -3,7 +3,7 @@ Projeto realizado para obtenção do certificado do bootcamp da MRV promovido pe
 
 Seguem algumas imagens do projeto:
 
-<img src = "./github-app/img/imagem1"/>
+<img src = "https://github.com/vinicarlosss/Projeto_final_bootcamp_MRV/blob/main/github-app/img/imagem1.png?raw=true"/>
 
-<img src = "./github-app/img/imagem2"/>
+<img src = "https://github.com/vinicarlosss/Projeto_final_bootcamp_MRV/blob/main/github-app/img/imagem2.png?raw=true"/>
 
